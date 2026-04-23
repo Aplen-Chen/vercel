@@ -404,12 +404,12 @@ export default function App() {
       <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 py-6 md:py-12">
         <div className="relative pt-24 md:pt-36">
           {/* 左側小精靈 */}
-          <div className="absolute top-16 md:top-0 left-2 md:left-8 z-40 w-28 md:w-[220px]">
+          <div className="absolute top-16 md:top-0 -left-2 md:left-8 z-40 w-28 md:w-[220px]">
             <MascotSprite src={pinkMascot} label="女IP角色" side="left" />
           </div>
 
           {/* 右側小精靈 */}
-          <div className="absolute top-16 md:top-0 right-2 md:right-8 z-40 w-28 md:w-[200px]">
+          <div className="absolute top-16 md:top-0 -right-2 md:right-8 z-40 w-28 md:w-[200px]">
             <MascotSprite src={purpleMascot} label="男IP角色" side="right" />
           </div>
 
