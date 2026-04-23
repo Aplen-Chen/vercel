@@ -204,8 +204,38 @@ function MascotSprite({ src, label, side = "left", className = "" }) {
   );
 }
 
+function HeroSection() {
+  return (
+    <header className="relative mb-12 overflow-hidden rounded-[32px] border border-white/50 bg-gradient-to-br from-white/95 via-white/90 to-white/85 px-20 py-6 shadow-[0_32px_64px_rgba(139,92,246,0.2)] backdrop-blur-xl">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(167,139,250,0.18),transparent_45%),radial-gradient(circle_at_80%_20%,rgba(244,114,182,0.15),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(96,165,250,0.12),transparent_45%)]" />
+
+      <div className="absolute -left-20 -top-20 h-48 w-48 rounded-full bg-violet-400/25 blur-3xl" />
+      <div className="absolute -bottom-20 -right-20 h-48 w-48 rounded-full bg-pink-400/25 blur-3xl" />
+
+      <div className="relative flex min-h-[60px] items-center justify-center">
+        <div className="relative z-10 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl font-black leading-tight tracking-tight"
+          >
+            <span className="bg-gradient-to-r from-slate-800 via-violet-800 to-slate-800 bg-clip-text text-transparent">
+              客戶諮詢與業務交付
+            </span>
+            <span className="ml-3 inline-block bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-sm">
+              SOP流程圖
+            </span>
+          </motion.h1>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 function Card({ item, active, muted, align = "left" }) {
-  if (!item) return <div className="hidden" />;
+  if (!item) return <div className="hidden lg:block" />;
+
   const isCenter = item.tone === "center";
 
   return (
@@ -226,13 +256,13 @@ function Card({ item, active, muted, align = "left" }) {
 
       <div className="relative z-10">
         <div
-          className={`mb-3 inline-flex rounded-full px-4 py-1.5 text-sm font-extrabold tracking-wider ${
-            isCenter ? "bg-white/25 text-white shadow-lg" : "bg-white/90 text-slate-800 shadow-sm"
+          className={`mb-3 inline-flex rounded-full px-4 py-1.5 text-xs font-bold tracking-wider ${
+            isCenter ? "bg-white/25 text-white shadow-lg" : "bg-white/80 text-slate-700 shadow-sm"
           }`}
         >
           {item.label}
         </div>
-        <p className={`text-[17px] leading-relaxed font-semibold ${isCenter ? "text-white font-bold" : "text-slate-800"}`}>
+        <p className={`text-base leading-7 ${isCenter ? "text-white font-medium" : "text-slate-700"}`}>
           {item.text}
         </p>
       </div>
@@ -354,19 +384,30 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           </div>
         ) : null}
       </div>
+
+      <div className="hidden">
+        {step.center ? (
+          <Card item={step.center} active={isActive} muted={isMuted} align="center" />
+        ) : (
+          <>
+            <div className="ml-10 border-l-2 border-dashed border-blue-300 pl-6">
+              <Card item={step.left} active={isActive} muted={isMuted} align="left" />
+            </div>
+            {step.right ? (
+              <div className="ml-10 border-l-2 border-dashed border-emerald-300 pl-6">
+                <Card item={step.right} active={isActive} muted={isMuted} align="right" />
+              </div>
+            ) : null}
+          </>
+        )}
+      </div>
     </motion.div>
   );
 }
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const stepProgress = useMemo(() => getProgress(activeStep), [activeStep]);
-
-  // 合并滚动进度和步骤进度
-  const progress = useMemo(() => {
-    return Math.max(scrollProgress, stepProgress);
-  }, [scrollProgress, stepProgress]);
+  const progress = useMemo(() => getProgress(activeStep), [activeStep]);
 
   useEffect(() => {
     const onLeave = () => setActiveStep(null);
@@ -374,58 +415,27 @@ export default function App() {
     return () => window.removeEventListener("scroll", onLeave);
   }, []);
 
-  // 添加滚动进度监听
-  useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const scrollableHeight = documentHeight - windowHeight;
-      const scrollPercentage = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
-      setScrollProgress(scrollPercentage);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // 初始化
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen min-w-[1280px] bg-slate-50 text-slate-900">
-      <div className="fixed inset-0 bg-[url('https://aplen-chen.github.io/picture/bjt2.png')] bg-cover bg-center bg-no-repeat" />
+      <div className="fixed inset-0 bg-[url('https://aplen-chen.github.io/picture/bjt.png')] bg-cover bg-center bg-no-repeat" />
       <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/60 to-white/70 backdrop-blur-[3px]" />
 
       <div className="relative mx-auto w-[1280px] px-8 py-12">
-        <div className="relative pt-36">
+        <HeroSection />
+
+        <div className="relative">
           {/* 左側小精靈 */}
-          <div className="absolute top-0 left-8 z-40">
+          <div className="absolute -top-48 left-8 z-40">
             <MascotSprite src={pinkMascot} label="女IP角色" side="left" />
           </div>
 
           {/* 右側小精靈 */}
-          <div className="absolute top-0 right-8 z-40">
+          <div className="absolute -top-48 right-8 z-40">
             <MascotSprite src={purpleMascot} label="男IP角色" side="right" />
           </div>
 
           <section className="relative rounded-[44px] border-2 border-white/60 bg-gradient-to-br from-white/95 via-white/90 to-white/95 px-12 py-14 shadow-[0_32px_80px_rgba(139,92,246,0.15)] backdrop-blur-xl">
-            <div className="pointer-events-none absolute left-0 right-0 top-0 h-48 bg-gradient-to-b from-violet-50/60 via-transparent to-transparent" />
-
-            {/* 标题区域 */}
-            <div className="mb-10">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center text-4xl font-black leading-tight tracking-tight"
-              >
-                <span className="bg-gradient-to-r from-slate-800 via-violet-800 to-slate-800 bg-clip-text text-transparent">
-                  客戶諮詢與業務交付
-                </span>
-                <span className="ml-3 inline-block bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-sm">
-                  SOP流程圖
-                </span>
-              </motion.h1>
-            </div>
+          <div className="pointer-events-none absolute left-0 right-0 top-0 h-48 bg-gradient-to-b from-violet-50/60 via-transparent to-transparent" />
 
           <div className="sticky top-0 z-30 -mx-12 mb-10 flex items-center justify-between gap-4 rounded-[32px] border-2 border-white/70 bg-gradient-to-r from-white/98 via-violet-50/30 to-white/98 px-8 py-5 shadow-[0_8px_32px_rgba(139,92,246,0.15)] backdrop-blur-xl">
             <div>
@@ -456,7 +466,7 @@ export default function App() {
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 shadow-lg shadow-purple-500/50"
                 style={{ width: `${progress}%` }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               />
             </div>
           </div>
@@ -494,9 +504,8 @@ export default function App() {
               </div>
             ))}
           </div>
-          </section>
+        </section>
       </div>
-    </div>
     </div>
   );
 }
