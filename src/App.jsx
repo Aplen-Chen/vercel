@@ -162,12 +162,12 @@ const allSteps = phases.flatMap((phase) =>
 );
 
 const toneClass = {
-  seko: "bg-gradient-to-br from-blue-50/90 to-indigo-50/90 border-blue-200/60 text-blue-900 backdrop-blur-sm",
-  team: "bg-gradient-to-br from-indigo-50/90 to-purple-50/90 border-indigo-200/60 text-indigo-900 backdrop-blur-sm",
-  client: "bg-gradient-to-br from-emerald-50/90 to-teal-50/90 border-emerald-200/60 text-emerald-900 backdrop-blur-sm",
-  "client-strong": "bg-gradient-to-br from-orange-50/90 to-amber-50/90 border-orange-200/60 text-orange-900 backdrop-blur-sm",
-  placeholder: "bg-white/60 border-slate-200/60 text-slate-500 border-dashed backdrop-blur-sm",
-  center: "bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 text-white border-transparent shadow-lg shadow-purple-500/30",
+  seko: "bg-gradient-to-br from-purple-100/95 to-purple-200/95 border-purple-300/70 text-purple-900 backdrop-blur-sm",
+  team: "bg-gradient-to-br from-purple-100/95 to-purple-200/95 border-purple-300/70 text-purple-900 backdrop-blur-sm",
+  client: "bg-gradient-to-br from-pink-100/95 to-pink-200/95 border-pink-300/70 text-pink-900 backdrop-blur-sm",
+  "client-strong": "bg-gradient-to-br from-pink-200/95 to-pink-300/95 border-pink-400/70 text-pink-950 backdrop-blur-sm",
+  placeholder: "bg-white/80 border-purple-200/60 text-purple-500 border-dashed backdrop-blur-sm",
+  center: "bg-gradient-to-r from-[#371D4F] via-purple-700 to-[#E40046] text-white border-transparent shadow-lg shadow-purple-500/40",
 };
 
 function getProgress(activeStep) {
@@ -189,16 +189,23 @@ function MascotSprite({ src, label, side = "left", className = "" }) {
       animate={{ y: [0, -12, 0] }}
       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       className={[
-        "relative shrink-0 select-none",
-        side === "left" ? "w-[220px]" : "w-[200px]",
+        "relative shrink-0 select-none w-full",
         className,
       ].join(" ")}
     >
-      <div className="absolute inset-0 rounded-full bg-gradient-to-b from-violet-300/30 via-purple-300/20 to-transparent blur-3xl" />
+      <div className={`absolute inset-0 rounded-full bg-gradient-to-b blur-xl md:blur-3xl ${
+        side === "left"
+          ? "from-pink-300/40 via-pink-400/30 to-transparent"
+          : "from-purple-300/40 via-purple-400/30 to-transparent"
+      }`} />
       <img
         src={src}
         alt={label}
-        className="relative z-10 block h-auto w-full object-contain drop-shadow-[0_25px_40px_rgba(139,92,246,0.3)]"
+        className={`relative z-10 block h-auto w-full object-contain ${
+          side === "left"
+            ? "drop-shadow-[0_15px_25px_rgba(228,0,70,0.35)] md:drop-shadow-[0_25px_40px_rgba(228,0,70,0.35)]"
+            : "drop-shadow-[0_15px_25px_rgba(55,29,79,0.35)] md:drop-shadow-[0_25px_40px_rgba(55,29,79,0.35)]"
+        }`}
       />
     </motion.div>
   );
@@ -212,11 +219,11 @@ function Card({ item, active, muted, align = "left" }) {
     <motion.div
       whileHover={{ scale: isCenter ? 1 : 1.02, y: -2 }}
       className={[
-        "group relative rounded-[28px] border-2 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300",
+        "group relative rounded-2xl md:rounded-[28px] border-2 p-3 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300",
         toneClass[item.tone],
         active ? "scale-[1.03] shadow-[0_20px_60px_rgba(139,92,246,0.3)] ring-2 ring-violet-400/50" : "",
         muted ? "opacity-40 saturate-50" : "opacity-100",
-        align === "left" ? "mr-12" : "ml-12",
+        align === "left" ? "mr-4 md:mr-12" : "ml-4 md:ml-12",
         isCenter ? "overflow-hidden" : "",
       ].join(" ")}
     >
@@ -226,13 +233,13 @@ function Card({ item, active, muted, align = "left" }) {
 
       <div className="relative z-10">
         <div
-          className={`mb-3 inline-flex rounded-full px-4 py-1.5 text-sm font-extrabold tracking-wider ${
-            isCenter ? "bg-white/25 text-white shadow-lg" : "bg-white/90 text-slate-800 shadow-sm"
+          className={`mb-2 md:mb-3 inline-flex rounded-full px-2.5 md:px-4 py-1 md:py-1.5 text-[10px] md:text-sm font-extrabold tracking-wider ${
+            isCenter ? "bg-white/30 text-white shadow-lg" : "bg-white/95 text-purple-800 shadow-sm"
           }`}
         >
           {item.label}
         </div>
-        <p className={`text-[17px] leading-relaxed font-semibold ${isCenter ? "text-white font-bold" : "text-slate-800"}`}>
+        <p className={`text-xs md:text-[17px] leading-relaxed font-semibold ${isCenter ? "text-white font-bold" : "text-purple-900"}`}>
           {item.text}
         </p>
       </div>
@@ -257,7 +264,7 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
     >
       <div
         className={[
-          "relative grid items-center gap-6 grid-cols-[minmax(0,1fr)_140px_minmax(0,1fr)]",
+          "relative grid items-center gap-3 md:gap-6 grid-cols-[minmax(0,1fr)_60px_minmax(0,1fr)] md:grid-cols-[minmax(0,1fr)_140px_minmax(0,1fr)]",
           activeStep !== null && activeStep !== step.id ? "opacity-50" : "opacity-100",
         ].join(" ")}
       >
@@ -274,25 +281,25 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           <div />
         )}
 
-        <div className="relative flex min-h-[160px] items-center justify-center">
+        <div className="relative flex min-h-[100px] md:min-h-[160px] items-center justify-center">
           <div
-            className={`absolute left-1/2 top-0 h-full w-2 -translate-x-1/2 rounded-full transition-all duration-500 ${
+            className={`absolute left-1/2 top-0 h-full w-1.5 md:w-2 -translate-x-1/2 rounded-full transition-all duration-500 ${
               isActive
-                ? "bg-gradient-to-b from-violet-400 via-purple-500 to-fuchsia-500 shadow-[0_0_30px_rgba(139,92,246,0.6)]"
-                : "bg-gradient-to-b from-slate-200 to-slate-300"
+                ? "bg-gradient-to-b from-[#371D4F] via-purple-600 to-[#E40046] shadow-[0_0_30px_rgba(228,0,70,0.6)]"
+                : "bg-gradient-to-b from-purple-200 to-purple-300"
             }`}
           />
 
           {step.left && !step.center ? (
-            <div className="pointer-events-none absolute left-[calc(50%-260px)] right-1/2 top-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute left-[calc(50%-120px)] md:left-[calc(50%-260px)] right-1/2 top-1/2 -translate-y-1/2">
               <div
-                className={`relative h-0.5 border-t-[3px] border-dashed transition-all duration-500 ${
-                  isActive ? "border-violet-400" : "border-slate-300"
+                className={`relative h-0.5 border-t-[2px] md:border-t-[3px] border-dashed transition-all duration-500 ${
+                  isActive ? "border-purple-500" : "border-purple-300"
                 }`}
               >
                 <div
-                  className={`absolute -right-1.5 -top-[7px] h-0 w-0 border-b-[8px] border-l-[11px] border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
-                    isActive ? "border-l-violet-400" : "border-l-slate-300"
+                  className={`absolute -right-1 md:-right-1.5 -top-[5px] md:-top-[7px] h-0 w-0 border-b-[6px] md:border-b-[8px] border-l-[8px] md:border-l-[11px] border-t-[6px] md:border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
+                    isActive ? "border-l-purple-500" : "border-l-purple-300"
                   }`}
                 />
               </div>
@@ -300,15 +307,15 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           ) : null}
 
           {step.right && !step.center ? (
-            <div className="pointer-events-none absolute left-1/2 right-[calc(50%-260px)] top-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute left-1/2 right-[calc(50%-120px)] md:right-[calc(50%-260px)] top-1/2 -translate-y-1/2">
               <div
-                className={`relative h-0.5 border-t-[3px] border-dashed transition-all duration-500 ${
-                  isActive ? "border-emerald-400" : "border-slate-300"
+                className={`relative h-0.5 border-t-[2px] md:border-t-[3px] border-dashed transition-all duration-500 ${
+                  isActive ? "border-pink-500" : "border-pink-300"
                 }`}
               >
                 <div
-                  className={`absolute -left-1.5 -top-[7px] h-0 w-0 border-b-[8px] border-r-[11px] border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
-                    isActive ? "border-r-emerald-400" : "border-r-slate-300"
+                  className={`absolute -left-1 md:-left-1.5 -top-[5px] md:-top-[7px] h-0 w-0 border-b-[6px] md:border-b-[8px] border-r-[8px] md:border-r-[11px] border-t-[6px] md:border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
+                    isActive ? "border-r-pink-500" : "border-r-pink-300"
                   }`}
                 />
               </div>
@@ -318,17 +325,17 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           <motion.div
             whileHover={{ scale: 1.1, rotate: 360 }}
             transition={{ duration: 0.6 }}
-            className={`relative z-10 flex h-24 w-24 flex-col items-center justify-center rounded-full border-[5px] bg-white p-3 text-center shadow-xl transition-all duration-500 ${
+            className={`relative z-10 flex h-14 w-14 md:h-24 md:w-24 flex-col items-center justify-center rounded-full border-[3px] md:border-[5px] bg-white p-2 md:p-3 text-center shadow-xl transition-all duration-500 ${
               isActive
-                ? "scale-115 border-violet-500 shadow-[0_0_40px_rgba(139,92,246,0.4)]"
-                : "border-slate-300 shadow-slate-300/50"
+                ? "scale-115 border-[#E40046] shadow-[0_0_40px_rgba(228,0,70,0.5)]"
+                : "border-purple-300 shadow-purple-300/50"
             }`}
           >
-            <Icon className={`mb-1.5 h-5 w-5 transition-colors duration-500 ${isActive ? "text-violet-600" : "text-slate-500"}`} />
-            <span className="text-[11px] font-bold tracking-wider text-slate-500">STEP {step.id}</span>
+            <Icon className={`mb-0.5 md:mb-1.5 h-3 w-3 md:h-5 md:w-5 transition-colors duration-500 ${isActive ? "text-[#E40046]" : "text-purple-500"}`} />
+            <span className="text-[8px] md:text-[11px] font-bold tracking-wider text-purple-600">STEP {step.id}</span>
           </motion.div>
 
-          <div className="absolute bottom-full left-1/2 mb-4 w-40 -translate-x-1/2 text-center text-xs font-semibold leading-5 text-slate-600">
+          <div className="absolute bottom-full left-1/2 mb-2 md:mb-4 w-24 md:w-40 -translate-x-1/2 text-center text-[10px] md:text-xs font-semibold leading-4 md:leading-5 text-purple-700">
             {step.node}
           </div>
         </div>
@@ -348,7 +355,7 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
 
         {step.center ? (
           <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
-            <div className="w-[38rem]">
+            <div className="w-[90%] md:w-[38rem]">
               <Card item={step.center} active={isActive} muted={isMuted} align="center" />
             </div>
           </div>
@@ -391,77 +398,70 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen min-w-[1280px] bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="fixed inset-0 bg-[url('https://aplen-chen.github.io/picture/bjt2.png')] bg-cover bg-center bg-no-repeat" />
-      <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/60 to-white/70 backdrop-blur-[3px]" />
 
-      <div className="relative mx-auto w-[1280px] px-8 py-12">
-        <div className="relative pt-36">
+      <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 py-6 md:py-12">
+        <div className="relative pt-24 md:pt-36">
           {/* 左側小精靈 */}
-          <div className="absolute top-0 left-8 z-40">
+          <div className="absolute top-16 md:top-0 left-2 md:left-8 z-40 w-28 md:w-[220px]">
             <MascotSprite src={pinkMascot} label="女IP角色" side="left" />
           </div>
 
           {/* 右側小精靈 */}
-          <div className="absolute top-0 right-8 z-40">
+          <div className="absolute top-16 md:top-0 right-2 md:right-8 z-40 w-28 md:w-[200px]">
             <MascotSprite src={purpleMascot} label="男IP角色" side="right" />
           </div>
 
-          <section className="relative rounded-[44px] border-2 border-white/60 bg-gradient-to-br from-white/95 via-white/90 to-white/95 px-12 py-14 shadow-[0_32px_80px_rgba(139,92,246,0.15)] backdrop-blur-xl">
-            <div className="pointer-events-none absolute left-0 right-0 top-0 h-48 bg-gradient-to-b from-violet-50/60 via-transparent to-transparent" />
+          <section className="relative rounded-3xl md:rounded-[44px] border-2 border-white/40 bg-white/85 px-4 md:px-12 py-6 md:py-14 shadow-[0_32px_80px_rgba(55,29,79,0.25)] backdrop-blur-xl">
+            <div className="pointer-events-none absolute left-0 right-0 top-0 h-32 md:h-48 bg-gradient-to-b from-purple-100/40 via-transparent to-transparent" />
 
             {/* 标题区域 */}
-            <div className="mb-10">
+            <div className="mb-6 md:mb-10">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center text-4xl font-black leading-tight tracking-tight"
+                className="text-center text-xl md:text-4xl font-black leading-tight tracking-tight"
               >
-                <span className="bg-gradient-to-r from-slate-800 via-violet-800 to-slate-800 bg-clip-text text-transparent">
-                  客戶諮詢與業務交付
+                <span className="bg-gradient-to-r from-[#371D4F] via-purple-800 to-[#371D4F] bg-clip-text text-transparent">
+                  獨角獸客戶業務交付
                 </span>
-                <span className="ml-3 inline-block bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent drop-shadow-sm">
-                  SOP流程圖
+                <span className="ml-2 md:ml-3 inline-block bg-gradient-to-r from-purple-600 via-[#E40046] to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
+                  SOP圖
                 </span>
               </motion.h1>
             </div>
 
-          <div className="sticky top-0 z-30 -mx-12 mb-10 flex items-center justify-between gap-4 rounded-[32px] border-2 border-white/70 bg-gradient-to-r from-white/98 via-violet-50/30 to-white/98 px-8 py-5 shadow-[0_8px_32px_rgba(139,92,246,0.15)] backdrop-blur-xl">
-            <div>
-              <h2 className="bg-gradient-to-r from-violet-900 via-purple-800 to-violet-900 bg-clip-text text-3xl font-black tracking-tight text-transparent">流程圖</h2>
-              <p className="mt-1.5 text-sm font-medium text-slate-600">從諮詢確認到交付完結的完整路徑</p>
-            </div>
-            <div className="flex items-center gap-6 text-sm font-bold text-slate-600">
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 shadow-lg shadow-blue-500/30" />公司團隊
+          <div className="sticky top-0 z-30 -mx-4 md:-mx-12 mb-6 md:mb-10 rounded-2xl md:rounded-[32px] border-2 border-purple-200/60 bg-gradient-to-r from-white/95 via-purple-50/40 to-white/95 px-4 md:px-8 py-3 md:py-5 shadow-[0_8px_32px_rgba(55,29,79,0.2)] backdrop-blur-xl">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 mb-3">
+              <div className="flex items-center justify-between w-full md:w-auto gap-2">
+                <h2 className="bg-gradient-to-r from-[#371D4F] via-purple-700 to-[#371D4F] bg-clip-text text-xl md:text-3xl font-black tracking-tight text-transparent">流程圖</h2>
+                <p className="text-[10px] md:text-sm font-medium text-purple-700 md:hidden">從諮詢確認到交付完結的完整路徑</p>
               </div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 shadow-lg shadow-slate-400/30" />時間軸
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30" />客戶
+              <p className="hidden md:block text-sm font-medium text-purple-700">從諮詢確認到交付完結的完整路徑</p>
+              <div className="flex items-center gap-3 md:gap-6 text-xs md:text-sm font-bold text-purple-700">
+                <div className="flex items-center gap-1.5 md:gap-2.5">
+                  <span className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-lg shadow-purple-500/30" />公司團隊
+                </div>
+                <div className="flex items-center gap-1.5 md:gap-2.5">
+                  <span className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-gradient-to-br from-purple-300 to-purple-400 shadow-lg shadow-purple-400/30" />時間軸
+                </div>
+                <div className="flex items-center gap-1.5 md:gap-2.5">
+                  <span className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-gradient-to-br from-pink-400 to-[#E40046] shadow-lg shadow-pink-500/30" />客戶
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="sticky top-[108px] z-30 -mx-12 mb-12 rounded-[32px] border-2 border-white/70 bg-gradient-to-r from-white/98 via-purple-50/30 to-white/98 p-6 shadow-[0_8px_32px_rgba(139,92,246,0.15)] backdrop-blur-xl">
-            <div className="mb-3 flex items-center justify-between text-xs font-bold tracking-wider text-slate-600">
-              <span>時間進度</span>
-              <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-700">
-                {activeStep ? `STEP ${activeStep} / 17` : "懸停步驟查看聯動"}
-              </span>
-            </div>
-            <div className="h-4 overflow-hidden rounded-full bg-gradient-to-r from-slate-200 to-slate-300 shadow-inner">
+            <div className="h-3 md:h-4 overflow-hidden rounded-full bg-gradient-to-r from-purple-200 to-purple-300 shadow-inner">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 shadow-lg shadow-purple-500/50"
+                className="h-full rounded-full bg-gradient-to-r from-[#371D4F] via-purple-600 to-[#E40046] shadow-lg shadow-purple-500/50"
                 style={{ width: `${progress}%` }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </div>
           </div>
 
-          <div className="space-y-16">
+          <div className="space-y-10 md:space-y-16">
             {phases.map((phase, phaseIndex) => (
               <div key={phase.title} className="relative">
                 <motion.div
@@ -469,18 +469,18 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
-                  className="sticky top-5 z-20 mb-10 flex justify-center"
+                  className="sticky top-3 md:top-5 z-20 mb-6 md:mb-10 flex justify-center"
                 >
-                  <div className="rounded-full border-2 border-white/80 bg-gradient-to-r from-white/98 via-violet-50/50 to-white/98 px-7 py-3.5 shadow-[0_8px_32px_rgba(139,92,246,0.2)] backdrop-blur-xl">
-                    <span className="mr-4 text-sm font-black tracking-widest text-violet-400">0{phaseIndex + 1}</span>
-                    <span className="text-base font-black text-slate-800">{phase.title}</span>
-                    <span className="ml-4 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-4 py-1.5 text-xs font-bold text-violet-700 shadow-sm">
+                  <div className="rounded-full border-2 border-purple-200/80 bg-gradient-to-r from-white/95 via-purple-50/60 to-white/95 px-4 md:px-7 py-2 md:py-3.5 shadow-[0_8px_32px_rgba(55,29,79,0.25)] backdrop-blur-xl">
+                    <span className="mr-2 md:mr-4 text-xs md:text-sm font-black tracking-widest text-[#E40046]">0{phaseIndex + 1}</span>
+                    <span className="text-sm md:text-base font-black text-[#371D4F]">{phase.title}</span>
+                    <span className="ml-2 md:ml-4 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 px-2 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-bold text-purple-700 shadow-sm">
                       {phase.tag}
                     </span>
                   </div>
                 </motion.div>
 
-                <div className="space-y-12">
+                <div className="space-y-8 md:space-y-12">
                   {phase.steps.map((step, stepIndex) => (
                     <StepRow
                       key={step.id}
