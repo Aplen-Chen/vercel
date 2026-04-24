@@ -162,11 +162,11 @@ const allSteps = phases.flatMap((phase) =>
 );
 
 const toneClass = {
-  seko: "bg-gradient-to-br from-purple-100/95 to-purple-200/95 border-purple-300/70 text-purple-900 backdrop-blur-sm",
-  team: "bg-gradient-to-br from-purple-100/95 to-purple-200/95 border-purple-300/70 text-purple-900 backdrop-blur-sm",
-  client: "bg-gradient-to-br from-pink-100/95 to-pink-200/95 border-pink-300/70 text-pink-900 backdrop-blur-sm",
-  "client-strong": "bg-gradient-to-br from-pink-200/95 to-pink-300/95 border-pink-400/70 text-pink-950 backdrop-blur-sm",
-  placeholder: "bg-white/80 border-purple-200/60 text-purple-500 border-dashed backdrop-blur-sm",
+  seko: "bg-gradient-to-br from-white/25 to-white/10 border-white/30 text-white",
+  team: "bg-gradient-to-br from-white/25 to-white/10 border-white/30 text-white",
+  client: "bg-gradient-to-br from-white/25 to-white/10 border-white/30 text-white",
+  "client-strong": "bg-gradient-to-br from-white/25 to-white/10 border-white/30 text-white",
+  placeholder: "bg-gradient-to-br from-white/20 to-white/10 border-white/30 text-white/80 border-dashed",
   center: "bg-gradient-to-r from-[#371D4F] via-purple-700 to-[#E40046] text-white border-transparent shadow-lg shadow-purple-500/40",
 };
 
@@ -219,14 +219,31 @@ function Card({ item, active, muted, align = "left" }) {
     <motion.div
       whileHover={{ scale: isCenter ? 1 : 1.02, y: -2 }}
       className={[
-        "group relative rounded-2xl md:rounded-[28px] border-2 p-3 md:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300",
+        "group relative rounded-2xl md:rounded-[28px] border p-3 md:p-6 shadow-[0_8px_32px_rgba(0,0,0,0.15)] transition-all duration-300 overflow-hidden",
         toneClass[item.tone],
         active ? "scale-[1.03] shadow-[0_20px_60px_rgba(139,92,246,0.3)] ring-2 ring-violet-400/50" : "",
         muted ? "opacity-40 saturate-50" : "opacity-100",
         align === "left" ? "mr-4 md:mr-12" : "ml-4 md:ml-12",
-        isCenter ? "overflow-hidden" : "",
       ].join(" ")}
+      style={{
+        backdropFilter: isCenter ? "none" : "blur(15px) saturate(1.8)",
+        boxShadow: isCenter
+          ? "0 8px 32px rgba(0, 0, 0, 0.15)"
+          : "0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
+      }}
     >
+      {/* 光泽动画效果 */}
+      {!isCenter && (
+        <div
+          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)",
+            animation: "shine 3s infinite",
+            transform: "translateX(-100%)",
+          }}
+        />
+      )}
+
       {isCenter ? (
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.4),transparent_50%)]" />
       ) : null}
@@ -234,12 +251,12 @@ function Card({ item, active, muted, align = "left" }) {
       <div className="relative z-10">
         <div
           className={`mb-2 md:mb-3 inline-flex rounded-full px-2.5 md:px-4 py-1 md:py-1.5 text-[10px] md:text-sm font-extrabold tracking-wider ${
-            isCenter ? "bg-white/30 text-white shadow-lg" : "bg-white/95 text-purple-800 shadow-sm"
+            isCenter ? "bg-white/30 text-white shadow-lg" : "bg-white/20 text-white shadow-sm"
           }`}
         >
           {item.label}
         </div>
-        <p className={`text-xs md:text-[17px] leading-relaxed font-semibold ${isCenter ? "text-white font-bold" : "text-purple-900"}`}>
+        <p className={`text-xs md:text-[17px] leading-relaxed font-semibold text-white`}>
           {item.text}
         </p>
       </div>
@@ -256,7 +273,7 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.5, delay: index * 0.05 }}
       className="relative"
       onMouseEnter={() => setActiveStep(step.id)}
@@ -272,7 +289,7 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <Card item={step.left} active={isActive} muted={isMuted} align="left" />
@@ -291,15 +308,15 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           />
 
           {step.left && !step.center ? (
-            <div className="pointer-events-none absolute left-[calc(50%-120px)] md:left-[calc(50%-260px)] right-1/2 top-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute left-[calc(50%+35px)] md:left-[calc(50%+55px)] right-[calc(50%+125px)] md:right-[calc(50%+265px)] top-1/2 -translate-y-1/2">
               <div
                 className={`relative h-0.5 border-t-[2px] md:border-t-[3px] border-dashed transition-all duration-500 ${
-                  isActive ? "border-purple-500" : "border-purple-300"
+                  isActive ? "border-purple-400" : "border-purple-300"
                 }`}
               >
                 <div
                   className={`absolute -right-1 md:-right-1.5 -top-[5px] md:-top-[7px] h-0 w-0 border-b-[6px] md:border-b-[8px] border-l-[8px] md:border-l-[11px] border-t-[6px] md:border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
-                    isActive ? "border-l-purple-500" : "border-l-purple-300"
+                    isActive ? "border-l-purple-400" : "border-l-purple-300"
                   }`}
                 />
               </div>
@@ -307,15 +324,15 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
           ) : null}
 
           {step.right && !step.center ? (
-            <div className="pointer-events-none absolute left-1/2 right-[calc(50%-120px)] md:right-[calc(50%-260px)] top-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute left-[calc(50%+125px)] md:left-[calc(50%+265px)] right-[calc(50%+35px)] md:right-[calc(50%+55px)] top-1/2 -translate-y-1/2">
               <div
                 className={`relative h-0.5 border-t-[2px] md:border-t-[3px] border-dashed transition-all duration-500 ${
-                  isActive ? "border-pink-500" : "border-pink-300"
+                  isActive ? "border-pink-400" : "border-pink-300"
                 }`}
               >
                 <div
                   className={`absolute -left-1 md:-left-1.5 -top-[5px] md:-top-[7px] h-0 w-0 border-b-[6px] md:border-b-[8px] border-r-[8px] md:border-r-[11px] border-t-[6px] md:border-t-[8px] border-b-transparent border-t-transparent transition-all duration-500 ${
-                    isActive ? "border-r-pink-500" : "border-r-pink-300"
+                    isActive ? "border-r-pink-400" : "border-r-pink-300"
                   }`}
                 />
               </div>
@@ -335,8 +352,22 @@ function StepRow({ step, index, activeStep, setActiveStep }) {
             <span className="text-[8px] md:text-[11px] font-bold tracking-wider text-purple-600">STEP {step.id}</span>
           </motion.div>
 
-          <div className="absolute bottom-full left-1/2 mb-2 md:mb-4 w-24 md:w-40 -translate-x-1/2 text-center text-[10px] md:text-xs font-semibold leading-4 md:leading-5 text-purple-700">
-            {step.node}
+          {/* 节点标签框 */}
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2">
+            {/* 连接线 - 移除或设为极小 */}
+
+            {/* 文字框 */}
+            <div
+              className="rounded-2xl border border-white/30 bg-gradient-to-br from-white/25 to-white/10 px-4 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.15)]"
+              style={{
+                backdropFilter: "blur(15px) saturate(1.8)",
+                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
+              }}
+            >
+              <p className="text-xs font-semibold text-white whitespace-nowrap text-center">
+                {step.node}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -399,48 +430,86 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="fixed inset-0 bg-[url('https://aplen-chen.github.io/picture/bjt2.png')] bg-cover bg-center bg-no-repeat" />
+      <div className="fixed inset-0 bg-[url('https://aplen-chen.github.io/picture/Image_12.png')] bg-cover bg-center bg-no-repeat" />
 
       <div className="relative mx-auto max-w-[1280px] px-4 md:px-8 py-6 md:py-12">
-        <div className="relative pt-24 md:pt-36">
-          {/* 左側小精靈 */}
-          <div className="absolute top-16 md:top-0 -left-2 md:left-8 z-40 w-28 md:w-[220px]">
-            <MascotSprite src={pinkMascot} label="女IP角色" side="left" />
-          </div>
-
-          {/* 右側小精靈 */}
-          <div className="absolute top-16 md:top-0 -right-2 md:right-8 z-40 w-28 md:w-[200px]">
-            <MascotSprite src={purpleMascot} label="男IP角色" side="right" />
-          </div>
-
-          <section className="relative rounded-3xl md:rounded-[44px] border-2 border-white/40 bg-white/85 px-4 md:px-12 py-6 md:py-14 shadow-[0_32px_80px_rgba(55,29,79,0.25)] backdrop-blur-xl">
-            <div className="pointer-events-none absolute left-0 right-0 top-0 h-32 md:h-48 bg-gradient-to-b from-purple-100/40 via-transparent to-transparent" />
-
+        <div className="relative pt-8 md:pt-12">
             {/* 标题区域 */}
-            <div className="mb-6 md:mb-10">
-              <motion.h1
+            <div className="mb-8 md:mb-12">
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-center text-xl md:text-4xl font-black leading-tight tracking-tight"
+                className="flex items-center justify-center gap-4 md:gap-6 mb-6 md:mb-8"
               >
-                <span className="bg-gradient-to-r from-[#371D4F] via-purple-800 to-[#371D4F] bg-clip-text text-transparent">
-                  獨角獸客戶業務交付
-                </span>
-                <span className="ml-2 md:ml-3 inline-block bg-gradient-to-r from-purple-600 via-[#E40046] to-pink-600 bg-clip-text text-transparent drop-shadow-sm">
-                  SOP圖
-                </span>
-              </motion.h1>
+                {/* 独角兽图标 */}
+                <div className="w-16 h-16 md:w-24 md:h-24 flex-shrink-0">
+                  <img
+                    src="https://aplen-chen.github.io/picture/logo.png"
+                    alt="獨角獸Logo"
+                    className="w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)]"
+                  />
+                </div>
+
+                {/* 主标题 */}
+                <h1 className="text-3xl md:text-6xl font-black text-white tracking-wider leading-tight">
+                  獨角獸客戶業務交付 | SOP圖
+                </h1>
+              </motion.div>
+
+              {/* 分隔线 */}
+              <div className="relative w-full h-0.5 md:h-1 mb-4 md:mb-6">
+                {/* 基础线条 */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+
+                {/* 中间发光核心 - 使用径向渐变实现椭圆形光晕 */}
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 md:h-12"
+                  style={{
+                    width: '800px',
+                    background: 'radial-gradient(ellipse 400px 20px at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 10%, rgba(255,255,255,0.4) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.05) 75%, transparent 100%)',
+                    filter: 'blur(3px)'
+                  }}
+                ></div>
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-6 md:h-8"
+                  style={{
+                    width: '600px',
+                    background: 'radial-gradient(ellipse 300px 15px at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 20%, rgba(255,255,255,0.3) 50%, transparent 100%)',
+                    filter: 'blur(2px)'
+                  }}
+                ></div>
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-4 md:h-5"
+                  style={{
+                    width: '400px',
+                    background: 'radial-gradient(ellipse 200px 10px at center, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 30%, rgba(255,255,255,0.4) 60%, transparent 100%)',
+                    filter: 'blur(1px)'
+                  }}
+                ></div>
+              </div>
+
+              {/* 副标题 */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="text-center text-sm md:text-xl text-white/90 tracking-[0.3em] md:tracking-[0.5em] font-medium"
+              >
+                從諮詢確認到交付完結的完整路徑
+              </motion.p>
             </div>
 
-          <div className="sticky top-0 z-30 -mx-4 md:-mx-12 mb-6 md:mb-10 rounded-2xl md:rounded-[32px] border-2 border-purple-200/60 bg-gradient-to-r from-white/95 via-purple-50/40 to-white/95 px-4 md:px-8 py-3 md:py-5 shadow-[0_8px_32px_rgba(55,29,79,0.2)] backdrop-blur-xl">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 mb-3">
-              <div className="flex items-center justify-between w-full md:w-auto gap-2">
-                <h2 className="bg-gradient-to-r from-[#371D4F] via-purple-700 to-[#371D4F] bg-clip-text text-xl md:text-3xl font-black tracking-tight text-transparent">流程圖</h2>
-                <p className="text-[10px] md:text-sm font-medium text-purple-700 md:hidden">從諮詢確認到交付完結的完整路徑</p>
+          <div className="sticky top-0 z-30 -mx-4 md:-mx-12 mb-6 md:mb-10 rounded-2xl md:rounded-[32px] border-2 border-gray-200/30 bg-gray-100/40 px-4 md:px-8 py-3 md:py-5 shadow-[0_8px_32px_rgba(0,0,0,0.1)] backdrop-blur-md">
+            <div className="flex flex-col gap-3 mb-3">
+              {/* 第一行：标题和副标题 */}
+              <div className="flex items-center justify-between w-full">
+                <h2 className="text-xl md:text-3xl font-black tracking-tight text-white">流程圖</h2>
+                <p className="text-[10px] md:text-sm font-medium text-white/90">從諮詢確認到交付完結的完整路徑</p>
               </div>
-              <p className="hidden md:block text-sm font-medium text-purple-700">從諮詢確認到交付完結的完整路徑</p>
-              <div className="flex items-center gap-3 md:gap-6 text-xs md:text-sm font-bold text-purple-700">
+
+              {/* 第二行：图例分布在左中右 */}
+              <div className="flex items-center justify-between w-full text-xs md:text-sm font-bold text-white">
                 <div className="flex items-center gap-1.5 md:gap-2.5">
                   <span className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-lg shadow-purple-500/30" />公司團隊
                 </div>
@@ -467,14 +536,14 @@ export default function App() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.5 }}
-                  className="sticky top-3 md:top-5 z-20 mb-6 md:mb-10 flex justify-center"
+                  className="sticky top-3 md:top-5 z-20 mb-12 md:mb-16 flex justify-center"
                 >
-                  <div className="rounded-full border-2 border-purple-200/80 bg-gradient-to-r from-white/95 via-purple-50/60 to-white/95 px-4 md:px-7 py-2 md:py-3.5 shadow-[0_8px_32px_rgba(55,29,79,0.25)] backdrop-blur-xl">
-                    <span className="mr-2 md:mr-4 text-xs md:text-sm font-black tracking-widest text-[#E40046]">0{phaseIndex + 1}</span>
-                    <span className="text-sm md:text-base font-black text-[#371D4F]">{phase.title}</span>
-                    <span className="ml-2 md:ml-4 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 px-2 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-bold text-purple-700 shadow-sm">
+                  <div className="rounded-full border-2 border-gray-200/30 bg-gray-100/40 px-4 md:px-7 py-2 md:py-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.1)] backdrop-blur-md">
+                    <span className="mr-2 md:mr-4 text-xs md:text-sm font-black tracking-widest text-white">0{phaseIndex + 1}</span>
+                    <span className="text-sm md:text-base font-black text-white">{phase.title}</span>
+                    <span className="ml-2 md:ml-4 rounded-full bg-white/20 px-2 md:px-4 py-1 md:py-1.5 text-[10px] md:text-xs font-bold text-white shadow-sm">
                       {phase.tag}
                     </span>
                   </div>
@@ -494,7 +563,6 @@ export default function App() {
               </div>
             ))}
           </div>
-          </section>
       </div>
     </div>
     </div>
