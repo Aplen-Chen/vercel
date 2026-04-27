@@ -12,8 +12,8 @@ import {
   CalendarDays,
 } from "lucide-react";
 
-const pinkMascot = "https://aplen-chen.github.io/picture/IP.png";
-const purpleMascot = "https://aplen-chen.github.io/picture/boyip.png";
+const pinkMascot = "https://UNICORN-WISDOM.github.io/picture/IP.png";
+const purpleMascot = "https://UNICORN-WISDOM.github.io/picture/boyip.png";
 
 const phases = [
   {
